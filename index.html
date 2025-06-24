@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanisGenius - Painel de Controle</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link.active { background-color: #4f46e5; color: white; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .result-content h3 { font-size: 1.125rem; font-weight: 600; margin-top: 1rem; }
+        .result-content p, .result-content li { margin-top: 0.5rem; line-height: 1.6; }
+        .result-content ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Tela de Login -->
+    <div id="login-wrapper" class="flex items-center justify-center h-screen bg-slate-200">
+        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+             <div class="flex justify-center items-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2 text-indigo-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" /></svg>
+                <h1 class="text-3xl font-bold text-slate-700">CanisGenius</h1>
+            </div>
+            <h2 class="text-xl text-center text-slate-600 mb-8">Acesse seu painel</h2>
+            <form id="login-form">
+                <div><label for="email" class="block text-sm font-medium text-slate-600 mb-1">E-mail</label><input type="email" id="email" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mt-4"><label for="password" class="block text-sm font-medium text-slate-600 mb-1">Senha</label><input type="password" id="password" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <p id="auth-error" class="text-red-500 text-sm mt-4 text-center h-4"></p>
+                <div class="mt-6"><button id="login-button" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-300">Entrar</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Painel Principal da Aplicação -->
+    <div id="app-wrapper" class="h-screen" style="display: none;">
+        <aside class="w-64 bg-slate-800 text-white flex flex-col p-4 fixed h-full overflow-y-auto">
+            <div class="flex items-center mb-8"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 text-indigo-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" /></svg><h1 class="text-2xl font-bold">CanisGenius</h1></div>
+            <nav class="flex-grow">
+                <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Operações</p>
+                <ul>
+                    <li><a href="#" data-tool="atividades" class="nav-link active flex items-center py-3 px-4 rounded-lg">Gerador de Atividades</a></li>
+                    <li class="mt-2"><a href="#" data-tool="rotina" class="nav-link flex items-center py-3 px-4 rounded-lg">Montador de Rotina</a></li>
+                    <li class="mt-2"><a href="#" data-tool="relatorios" class="nav-link flex items-center py-3 px-4 rounded-lg">Gerador de Relatórios</a></li>
+                    <li class="mt-2"><a href="#" data-tool="assistente" class="nav-link flex items-center py-3 px-4 rounded-lg">Super Assistente</a></li>
+                </ul>
+                <p class="px-4 mt-6 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Marketing & Criatividade</p>
+                <ul>
+                    <li class="mt-2"><a href="#" data-tool="conteudo" class="nav-link flex items-center py-3 px-4 rounded-lg">Criador de Conteúdo</a></li>
+                    <li class="mt-2"><a href="#" data-tool="roteiro" class="nav-link flex items-center py-3 px-4 rounded-lg">Roteirista de Vídeos</a></li>
+                    <li class="mt-2"><a href="#" data-tool="brainstorm" class="nav-link flex items-center py-3 px-4 rounded-lg">Brainstorm de Nomes</a></li>
+                </ul>
+            </nav>
+            <div class="mt-auto">
+                <div class="text-xs text-slate-400 p-4 border-t border-slate-700"><p>Logado como:</p><p id="user-email-display" class="font-medium text-slate-300 truncate"></p></div>
+                 <button id="logout-button" class="w-full flex items-center justify-center py-3 px-4 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V5h10a1 1 0 100-2H3zm12.293 4.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L16.586 13H9a1 1 0 110-2h7.586l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>Sair</button>
+            </div>
+        </aside>
+
+        <main class="ml-64 flex-1 p-8 overflow-y-auto">
+            <!-- Ferramenta 1: Gerador de Atividades (Restaurado) -->
+            <div id="ferramenta-atividades" class="tool-content bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-bold mb-6 text-slate-700">Gerador de Atividades Caninas</h2>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div><label for="perfilGrupo" class="block text-sm font-medium text-slate-600 mb-1">Perfil do Grupo</label><input type="text" id="perfilGrupo" placeholder="Ex: Filhotes agitados" class="w-full p-2 border border-slate-300 rounded-lg"></div>
+                        <div><label for="climaAtividade" class="block text-sm font-medium text-slate-600 mb-1">Condição Climática</label><input type="text" id="climaAtividade" placeholder="Ex: Chuvoso e frio" class="w-full p-2 border border-slate-300 rounded-lg"></div>
+                        <div><label for="focoAtividade" class="block text-sm font-medium text-slate-600 mb-1">Foco Principal</label><input type="text" id="focoAtividade" placeholder="Ex: Enriquecimento mental" class="w-full p-2 border border-slate-300 rounded-lg"></div>
+                    </div>
+                    <div><label for="observacoesAtividades" class="block text-sm font-medium text-slate-600 mb-1">Observações</label><textarea id="observacoesAtividades" rows="3" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Ex: Incluir o cão 'Thor', que é reativo a bolinhas."></textarea></div>
+                </div>
+                <button id="gerarIdeiasBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Atividades</button>
+                <div id="resultadoAtividades" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">As ideias de atividades aparecerão aqui...</p></div>
+            </div>
+
+            <!-- Ferramenta 2: Montador de Rotina (Restaurado) -->
+            <div id="ferramenta-rotina" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                 <h2 class="text-2xl font-bold mb-6 text-slate-700">Montador de Rotina Diária</h2>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div><label for="horarioInicio" class="block text-sm font-medium">Início</label><input type="time" id="horarioInicio" value="08:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                        <div><label for="horarioAlmoco" class="block text-sm font-medium">Almoço</label><input type="time" id="horarioAlmoco" value="12:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                        <div><label for="horarioSaida" class="block text-sm font-medium">Saída</label><input type="time" id="horarioSaida" value="18:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                        <div><label for="climaRotina" class="block text-sm font-medium">Clima</label><input type="text" id="climaRotina" placeholder="Ex: Agradável" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    </div>
+                    <div><label for="detalhesGrupos" class="block text-sm font-medium">Detalhes dos Cães e Grupos</label><textarea id="detalhesGrupos" rows="2" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 30 cães, 2 grupos: pequenos e grandes."></textarea></div>
+                    <div><label for="observacoesRotina" class="block text-sm font-medium">Observações</label><textarea id="observacoesRotina" rows="3" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: Turma da manhã tem mais energia."></textarea></div>
+                </div>
+                <button id="gerarRotinaBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Rotina Diária</button>
+                <div id="resultadoRotina" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A sugestão de rotina diária aparecerá aqui...</p></div>
+            </div>
+            
+            <!-- Ferramenta 3: Super Assistente (Restaurado) -->
+            <div id="ferramenta-assistente" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Super Assistente</h2>
+                <div class="mb-6"><label for="perguntaAberta" class="block text-sm font-medium">Sua dúvida ou pedido:</label><textarea id="perguntaAberta" rows="5" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 'Como posso acalmar um cão ansioso?'"></textarea></div>
+                <button id="perguntarAssistenteBtn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Perguntar ao Assistente</button>
+                <div id="resultadoAssistente" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A resposta do assistente aparecerá aqui...</p></div>
+            </div>
+
+            <!-- Ferramenta 4: Gerador de Relatórios -->
+            <div id="ferramenta-relatorios" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Gerador de Relatórios e Cartas</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label for="tipoRelatorio" class="block text-sm font-medium text-slate-600 mb-1">Tipo de Documento</label>
+                        <select id="tipoRelatorio" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="diario">Relatório Diário</option>
+                            <option value="boasvindas">Carta de Boas-Vindas (1º Dia)</option>
+                            <option value="boletim">Boletim de Fim de Ano</option>
+                        </select>
+                    </div>
+                    <div><label for="nomeCaoRelatorio" class="block text-sm font-medium text-slate-600 mb-1">Nome do Cão</label><input type="text" id="nomeCaoRelatorio" placeholder="Ex: Zeca" class="w-full p-2 border border-slate-300 rounded-lg"></div>
+                    <div><label for="observacoesRelatorio" class="block text-sm font-medium text-slate-600 mb-1">Observações / Pontos-Chave</label><textarea id="observacoesRelatorio" rows="4" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Para relatório diário: 'brincou com o Max, comeu tudo'. Para boletim: 'super sociável, aprendeu a sentar'."></textarea></div>
+                </div>
+                <button id="gerarRelatorioBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Documento</button>
+                <div id="resultadoRelatorio" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O documento gerado aparecerá aqui...</p></div>
+            </div>
+
+            <!-- Ferramenta 5: Criador de Conteúdo -->
+            <div id="ferramenta-conteudo" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Criador de Conteúdo para Redes Sociais</h2>
+                <div class="space-y-6">
+                     <div><label for="temaPost" class="block text-sm font-medium text-slate-600 mb-1">Tema do Post ou Descrição da Foto</label><textarea id="temaPost" rows="4" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Ex: 'dicas para dias de chuva' ou 'foto do Zeca, um golden retriever, dormindo de barriga para cima'"></textarea></div>
+                </div>
+                <button id="gerarConteudoBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Legenda</button>
+                <div id="resultadoConteudo" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A legenda e as hashtags aparecerão aqui...</p></div>
+            </div>
+
+            <!-- NOVA Ferramenta 6: Roteirista de Vídeos -->
+            <div id="ferramenta-roteiro" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Roteirista de Vídeos</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label for="tipoVideo" class="block text-sm font-medium text-slate-600 mb-1">Formato do Vídeo</label>
+                        <select id="tipoVideo" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="Dica Rápida para Stories">Dica Rápida para Stories (até 30s)</option>
+                            <option value="Vídeo para Reels/TikTok">Vídeo para Reels/TikTok (até 60s)</option>
+                            <option value="Vídeo para Feed/YouTube">Vídeo para Feed/YouTube (2-3 min)</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="temaVideo" class="block text-sm font-medium text-slate-600 mb-1">Tema Principal do Vídeo</label>
+                        <textarea id="temaVideo" rows="3" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Ex: 'Como cortar as unhas do cão em casa' ou 'Apresentando um novo cão na creche'"></textarea>
+                    </div>
+                </div>
+                <button id="gerarRoteiroBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Roteiro</button>
+                <div id="resultadoRoteiro" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O roteiro do vídeo aparecerá aqui...</p></div>
+            </div>
+            
+            <!-- Ferramenta 7: Brainstorm de Nomes -->
+             <div id="ferramenta-brainstorm" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Brainstorm de Nomes</h2>
+                <div class="space-y-6">
+                     <div><label for="temaNome" class="block text-sm font-medium text-slate-600 mb-1">Tema para o Nome</label><input type="text" id="temaNome" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Ex: 'festa de verão com piscina' ou 'grupo de cães idosos'"></div>
+                </div>
+                <button id="gerarNomesBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Nomes</button>
+                <div id="resultadoNomes" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">As ideias de nomes aparecerão aqui...</p></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL DA APLICAÇÃO -->
+    <script type="module">
+        // Importações do Firebase (APENAS para autenticação)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyDpuBQsU67U1ZeKrEWoxpXNmAaE7zQMQxs",
+          authDomain: "canisgenius-97a2b.firebaseapp.com",
+          projectId: "canisgenius-97a2b",
+          storageBucket: "canisgenius-97a2b.appspot.com",
+          messagingSenderId: "887611778051",
+          appId: "1:887611778051:web:458c86bd429f3d4a255a36",
+          measurementId: "G-LMQYKSQNDD"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const GEMINI_API_KEY = "AIzaSyAfiXTtGUKVyHib95WnMRmYiRW7xhtb8Wc";
+        
+        // --- Seleção de Elementos do DOM ---
+        const loginWrapper = document.getElementById('login-wrapper');
+        const appWrapper = document.getElementById('app-wrapper');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('login-button');
+        const logoutButton = document.getElementById('logout-button');
+        const authError = document.getElementById('auth-error');
+        const userEmailDisplay = document.getElementById('user-email-display');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const toolContents = document.querySelectorAll('.tool-content');
+
+        // --- Lógica de Autenticação ---
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                appWrapper.style.display = 'flex';
+                loginWrapper.style.display = 'none';
+                userEmailDisplay.textContent = user.email;
+            } else {
+                appWrapper.style.display = 'none';
+                loginWrapper.style.display = 'flex';
+            }
+        });
+        loginButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            authError.textContent = '';
+            try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); } 
+            catch (error) { authError.textContent = getAuthErrorMessage(error.code); }
+        });
+        logoutButton.addEventListener('click', async () => {
+            try { await signOut(auth); } 
+            catch (error) { console.error("Erro ao sair:", error); }
+        });
+        function getAuthErrorMessage(errorCode) {
+            switch (errorCode) {
+                case 'auth/invalid-email': return 'Formato de e-mail inválido.';
+                case 'auth/user-not-found': case 'auth/wrong-password': case 'auth/invalid-credential': return 'E-mail ou senha incorretos.';
+                default: return 'Ocorreu um erro. Tente novamente.';
+            }
+        }
+
+        // --- Lógica de Navegação da Aplicação ---
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tool = link.getAttribute('data-tool');
+                toolContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(`ferramenta-${tool}`).classList.remove('hidden');
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // --- Adicionar Listeners para TODOS os botões de ferramentas ---
+        function addToolListener(buttonId, resultId, promptBuilder) {
+            const button = document.getElementById(buttonId);
+            const resultElement = document.getElementById(resultId);
+            if (button && resultElement) {
+                button.addEventListener('click', () => {
+                    const prompt = promptBuilder();
+                    callSimpleApi(prompt, resultElement, button);
+                });
+            }
+        }
+
+        // Ferramenta 1: Gerador de Atividades
+        addToolListener('gerarIdeiasBtn', 'resultadoAtividades', () => {
+            return `# PERSONA
+Aja como um adestrador profissional e especialista em comportamento canino.
+# TAREFA
+Crie um plano com 3 atividades seguras para uma creche de cães.
+# CONTEXTO
+- Perfil do Grupo: ${document.getElementById('perfilGrupo').value}
+- Clima: ${document.getElementById('climaAtividade').value}
+- Foco: ${document.getElementById('focoAtividade').value}
+- Observações: ${document.getElementById('observacoesAtividades').value || 'Nenhuma'}
+# FORMATO
+**Nome da Atividade:**, **Benefícios Principais:**, **Materiais:**, **Passo a Passo:**, **⚠️ Segurança:**.`;
+        });
+
+        // Ferramenta 2: Montador de Rotina
+        addToolListener('gerarRotinaBtn', 'resultadoRotina', () => {
+            return `# PERSONA
+Aja como um gestor de operações de um daycare canino.
+# TAREFA
+Crie uma sugestão de rotina diária em formato de linha do tempo.
+# CONTEXTO
+- Horários: Início ${document.getElementById('horarioInicio').value}, Almoço ${document.getElementById('horarioAlmoco').value}, Saída ${document.getElementById('horarioSaida').value}
+- Clima: ${document.getElementById('climaRotina').value}
+- Detalhes dos Cães: ${document.getElementById('detalhesGrupos').value || 'Não especificado'}
+- Observações: ${document.getElementById('observacoesRotina').value || 'Nenhuma'}
+# FORMATO
+Use blocos "- **HH:MM - HH:MM:** Atividade (Justificativa)".`;
+        });
+        
+        // Ferramenta 3: Super Assistente
+        addToolListener('perguntarAssistenteBtn', 'resultadoAssistente', () => {
+            return `# PERSONA
+Você é o 'Gênio Canino', um assistente de IA especialista.
+# REGRAS
+1. Segurança em primeiro lugar. 2. Apenas reforço positivo. 3. Se envolver saúde, SEMPRE recomende "consultar um médico veterinário".
+# PERGUNTA DO USUÁRIO
+"${document.getElementById('perguntaAberta').value}"`;
+        });
+        
+        // Ferramenta 4: Gerador de Relatórios
+        addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => {
+            const tipo = document.getElementById('tipoRelatorio').value;
+            const nomeCao = document.getElementById('nomeCaoRelatorio').value;
+            const obs = document.getElementById('observacoesRelatorio').value;
+            if (tipo === 'diario') return `Aja como um cuidador da creche CanisGenius. Escreva um relatório curto e amigável para o tutor do cão '${nomeCao}', usando estas observações: "${obs}".`;
+            if (tipo === 'boasvindas') return `Aja como a equipe da creche CanisGenius. Escreva uma carta de boas-vindas curta e carinhosa para o tutor do cão '${nomeCao}', que veio pela primeira vez. Use estas observações: "${obs}". Fale diretamente com o cão.`;
+            if (tipo === 'boletim') return `Aja como um cuidador da creche CanisGenius. Escreva um boletim de fim de ano para o cão '${nomeCao}', usando os pontos-chave sobre a evolução dele: "${obs}".`;
+            return '';
+        });
+
+        // Ferramenta 5: Criador de Conteúdo
+        addToolListener('gerarConteudoBtn', 'resultadoConteudo', () => {
+            return `Aja como um social media de uma creche para cães. Crie uma legenda para um post no Instagram sobre: "${document.getElementById('temaPost').value}". Inclua 5 a 7 hashtags relevantes.`;
+        });
+        
+        // Ferramenta 6: Roteirista de Vídeos
+        addToolListener('gerarRoteiroBtn', 'resultadoRoteiro', () => {
+            return `Aja como um roteirista e especialista em marketing digital para pet shops. Crie um roteiro para um vídeo do tipo "${document.getElementById('tipoVideo').value}" com o tema "${document.getElementById('temaVideo').value}". O roteiro deve incluir: 1. **Título Chamativo**. 2. **Cena a Cena:** (Descreva a imagem e a narração/texto). 3. **Música Sugerida**. 4. **Texto para a Descrição do Post**.`;
+        });
+        
+        // Ferramenta 7: Brainstorm de Nomes
+        addToolListener('gerarNomesBtn', 'resultadoNomes', () => {
+            return `Faça um brainstorm e liste 10 nomes criativos e divertidos para algo relacionado a cães. O tema é: "${document.getElementById('temaNome').value}". Use trocadilhos.`;
+        });
+
+        async function callSimpleApi(prompt, resultElement, buttonElement) {
+            if (!prompt) return;
+            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("SUA_CHAVE")) {
+                 resultElement.innerHTML = `<p class="text-red-500"><strong>ERRO:</strong> A chave da API do Gemini não foi configurada.</p>`;
+                 return;
+            }
+            resultElement.innerHTML = '<div class="loader"></div>';
+            buttonElement.disabled = true;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `Erro de Rede: ${response.status}`);
+                }
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text;
+                resultElement.innerHTML = formatResponse(text);
+            } catch (error) {
+                console.error("Erro ao chamar a API do Gemini:", error);
+                resultElement.innerHTML = `<p class="text-red-500">Ocorreu um erro: ${error.message}</p>`;
+            } finally {
+                buttonElement.disabled = false;
+            }
+        }
+        
+        function formatResponse(text) { 
+            if (!text) return '';
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/# (.*)/g, '<h3>$1</h3>').replace(/⚠️/g, '<span class="text-amber-600 font-bold">⚠️</span>').replace(/\n/g, '<br>'); 
+        }
+    </script>
+</body>
+</html>
