@@ -135,7 +135,7 @@
                 <div id="resultadoConteudo" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A legenda e as hashtags aparecerão aqui...</p></div>
             </div>
 
-            <!-- NOVA Ferramenta 6: Roteirista de Vídeos -->
+            <!-- Ferramenta 6: Roteirista de Vídeos -->
             <div id="ferramenta-roteiro" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Roteirista de Vídeos</h2>
                 <div class="space-y-6">
@@ -293,14 +293,20 @@ Você é o 'Gênio Canino', um assistente de IA especialista.
 "${document.getElementById('perguntaAberta').value}"`;
         });
         
-        // Ferramenta 4: Gerador de Relatórios
+        // Ferramenta 4: Gerador de Relatórios (COM PROMPTS MELHORADOS)
         addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => {
             const tipo = document.getElementById('tipoRelatorio').value;
             const nomeCao = document.getElementById('nomeCaoRelatorio').value;
             const obs = document.getElementById('observacoesRelatorio').value;
-            if (tipo === 'diario') return `Aja como um cuidador da creche CanisGenius. Escreva um relatório curto e amigável para o tutor do cão '${nomeCao}', usando estas observações: "${obs}".`;
-            if (tipo === 'boasvindas') return `Aja como a equipe da creche CanisGenius. Escreva uma carta de boas-vindas curta e carinhosa para o tutor do cão '${nomeCao}', que veio pela primeira vez. Use estas observações: "${obs}". Fale diretamente com o cão.`;
-            if (tipo === 'boletim') return `Aja como um cuidador da creche CanisGenius. Escreva um boletim de fim de ano para o cão '${nomeCao}', usando os pontos-chave sobre a evolução dele: "${obs}".`;
+            if (tipo === 'diario') {
+                return `Aja como um cuidador atencioso e profissional da creche CanisGenius. Elabore um relatório diário detalhado e afetuoso para o tutor do(a) cão/cadela '${nomeCao}'. O texto deve ser bem escrito e transmitir segurança e carinho. Transforme as seguintes observações curtas em um parágrafo fluído e informativo: "${obs}". Conclua de forma positiva, mencionando que a equipe está ansiosa para revê-lo(a) amanhã.`;
+            }
+            if (tipo === 'boasvindas') {
+                return `Aja como a equipe de boas-vindas da creche CanisGenius. Elabore uma carta de boas-vindas calorosa e completa para o tutor do(a) '${nomeCao}', celebrando o seu primeiro dia conosco. A carta deve ser emocionante e profissional, descrevendo a importância desta nova jornada. Use as seguintes observações sobre a primeira experiência dele(a) para construir o texto: "${obs}". Finalize reforçando a alegria da equipe em tê-lo(a) na matilha CanisGenius.`;
+            }
+            if (tipo === 'boletim') {
+                return `Aja como o principal cuidador e especialista em comportamento da creche CanisGenius. Elabore um boletim de fim de ano emocionante e detalhado para os tutores do(a) '${nomeCao}'. Faça uma retrospectiva do ano, transformando os seguintes pontos-chave em uma narrativa cativante sobre a evolução, as amizades e os momentos marcantes dele(a) na creche: "${obs}". O tom deve ser de celebração e gratidão pela confiança.`;
+            }
             return '';
         });
 
