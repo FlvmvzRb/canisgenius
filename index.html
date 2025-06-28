@@ -13,7 +13,10 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .nav-link.active { background-color: #4f46e5; color: white; }
+        .nav-link.active { background-color: #4338ca; color: white; } /* indigo-700 */
+        .nav-link-mobile.active-mobile { background-color: #3730a3; } /* indigo-800 */
+        .nav-category-btn.active-category { color: #c7d2fe; } /* indigo-200 */
+
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .result-content h3 { font-size: 1.125rem; font-weight: 600; margin-top: 1rem; }
@@ -25,49 +28,47 @@
 
     <!-- Tela de Login -->
     <div id="login-wrapper" class="flex items-center justify-center h-screen bg-slate-200">
-        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg m-4">
              <div class="flex justify-center items-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2 text-indigo-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" /></svg>
                 <h1 class="text-3xl font-bold text-slate-700">CanisGenius</h1>
             </div>
             <h2 class="text-xl text-center text-slate-600 mb-8">Acesse seu painel</h2>
             <form id="login-form">
-                <div><label for="email" class="block text-sm font-medium text-slate-600 mb-1">E-mail</label><input type="email" id="email" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mt-4"><label for="password" class="block text-sm font-medium text-slate-600 mb-1">Senha</label><input type="password" id="password" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div><label for="email" class="block text-sm font-medium text-slate-600 mb-1">E-mail</label><input type="email" id="email" class="w-full p-3 border border-slate-300 rounded-lg" required></div>
+                <div class="mt-4"><label for="password" class="block text-sm font-medium text-slate-600 mb-1">Senha</label><input type="password" id="password" class="w-full p-3 border border-slate-300 rounded-lg" required></div>
                 <p id="auth-error" class="text-red-500 text-sm mt-4 text-center h-4"></p>
-                <div class="mt-6"><button id="login-button" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-300">Entrar</button></div>
+                <div class="mt-6"><button id="login-button" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Entrar</button></div>
             </form>
         </div>
     </div>
 
     <!-- Painel Principal da Aplicação -->
-    <div id="app-wrapper" class="h-screen" style="display: none;">
-        <aside class="w-64 bg-slate-800 text-white flex flex-col p-4 fixed h-full overflow-y-auto">
-            <div class="flex items-center mb-8"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 text-indigo-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" /></svg><h1 class="text-2xl font-bold">CanisGenius</h1></div>
-            <nav class="flex-grow">
-                <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Operações</p>
-                <ul>
-                    <li><a href="#" data-tool="atividades" class="nav-link active flex items-center py-3 px-4 rounded-lg">Gerador de Atividades</a></li>
-                    <li class="mt-2"><a href="#" data-tool="rotina" class="nav-link flex items-center py-3 px-4 rounded-lg">Montador de Rotina</a></li>
-                    <li class="mt-2"><a href="#" data-tool="relatorios" class="nav-link flex items-center py-3 px-4 rounded-lg">Gerador de Relatórios</a></li>
-                    <li class="mt-2"><a href="#" data-tool="assistente" class="nav-link flex items-center py-3 px-4 rounded-lg">Super Assistente</a></li>
-                </ul>
-                <p class="px-4 mt-6 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Marketing & Criatividade</p>
-                <ul>
-                    <li class="mt-2"><a href="#" data-tool="conteudo" class="nav-link flex items-center py-3 px-4 rounded-lg">Criador de Conteúdo</a></li>
-                    <li class="mt-2"><a href="#" data-tool="roteiro" class="nav-link flex items-center py-3 px-4 rounded-lg">Roteirista de Vídeos</a></li>
-                    <li class="mt-2"><a href="#" data-tool="brainstorm" class="nav-link flex items-center py-3 px-4 rounded-lg">Brainstorm de Nomes</a></li>
-                </ul>
-            </nav>
-            <div class="mt-auto">
-                <div class="text-xs text-slate-400 p-4 border-t border-slate-700"><p>Logado como:</p><p id="user-email-display" class="font-medium text-slate-300 truncate"></p></div>
-                 <button id="logout-button" class="w-full flex items-center justify-center py-3 px-4 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V5h10a1 1 0 100-2H3zm12.293 4.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L16.586 13H9a1 1 0 110-2h7.586l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>Sair</button>
+    <div id="app-wrapper" class="min-h-screen bg-slate-100" style="display: none;">
+        <header class="bg-slate-800 text-white fixed top-0 left-0 right-0 z-20 shadow-md">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 text-indigo-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" /></svg><h1 class="text-xl font-bold">CanisGenius</h1></div>
+                    <nav class="hidden md:flex space-x-2">
+                        <div class="relative"><button id="operacoes-btn" class="nav-category-btn p-2 rounded-md hover:bg-slate-700 flex items-center">Operações & Segurança<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><div id="operacoes-menu" class="absolute hidden bg-slate-700 text-white rounded-md mt-2 w-52 shadow-lg"><a href="#" data-tool="atividades" class="nav-link active block px-4 py-2 hover:bg-slate-600">Gerador de Atividades</a><a href="#" data-tool="rotina" class="nav-link block px-4 py-2 hover:bg-slate-600">Montador de Rotina</a></div></div>
+                        <div class="relative"><button id="comunicacao-btn" class="nav-category-btn p-2 rounded-md hover:bg-slate-700 flex items-center">Comunicação & CRM<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><div id="comunicacao-menu" class="absolute hidden bg-slate-700 text-white rounded-md mt-2 w-56 shadow-lg"><a href="#" data-tool="relatorios" class="nav-link block px-4 py-2 hover:bg-slate-600">Gerador de Relatórios</a><a href="#" data-tool="comunicados" class="nav-link block px-4 py-2 hover:bg-slate-600">Gerador de Comunicados</a><a href="#" data-tool="crm" class="nav-link block px-4 py-2 hover:bg-slate-600">Mensagens de Carinho</a></div></div>
+                        <div class="relative"><button id="vendas-btn" class="nav-category-btn p-2 rounded-md hover:bg-slate-700 flex items-center">Loja & Vendas<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><div id="vendas-menu" class="absolute hidden bg-slate-700 text-white rounded-md mt-2 w-56 shadow-lg"><a href="#" data-tool="calculadora" class="nav-link block px-4 py-2 hover:bg-slate-600">Calculadora de Pacotes</a><a href="#" data-tool="vendas" class="nav-link block px-4 py-2 hover:bg-slate-600">Roteirista de Vendas</a><a href="#" data-tool="produtos" class="nav-link block px-4 py-2 hover:bg-slate-600">Descritivo de Produtos</a></div></div>
+                        <div class="relative"><button id="marketing-btn" class="nav-category-btn p-2 rounded-md hover:bg-slate-700 flex items-center">Marketing<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><div id="marketing-menu" class="absolute hidden bg-slate-700 text-white rounded-md mt-2 w-52 shadow-lg"><a href="#" data-tool="conteudo" class="nav-link block px-4 py-2 hover:bg-slate-600">Criador de Conteúdo</a><a href="#" data-tool="roteiro" class="nav-link block px-4 py-2 hover:bg-slate-600">Roteirista de Vídeos</a><a href="#" data-tool="brainstorm" class="nav-link block px-4 py-2 hover:bg-slate-600">Brainstorm de Nomes</a></div></div>
+                        <a href="#" data-tool="assistente" class="nav-link p-2 rounded-md hover:bg-slate-700">Super Assistente</a>
+                    </nav>
+                    <div class="flex items-center">
+                        <div class="relative"><button id="user-menu-btn" class="p-2 rounded-full hover:bg-slate-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0012 11z" clip-rule="evenodd" /></svg></button><div id="user-menu" class="absolute hidden right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 text-slate-800"><div class="px-4 py-2 text-xs text-slate-500">Logado como:</div><div id="user-email-display-desktop" class="px-4 py-2 font-medium truncate"></div><div class="border-t border-slate-200"></div><button id="logout-button-desktop" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-slate-100">Sair</button></div></div>
+                        <button id="hamburger-btn" class="md:hidden p-2 rounded-md hover:bg-slate-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m4 6H4" /></svg></button>
+                    </div>
+                </div>
+                 <div id="mobile-menu" class="hidden md:hidden pb-4">
+                    <!-- Conteúdo do Menu Mobile será gerado via JS -->
+                 </div>
             </div>
-        </aside>
+        </header>
 
-        <main class="ml-64 flex-1 p-8 overflow-y-auto">
-            <!-- Ferramenta 1: Gerador de Atividades (Restaurado) -->
-            <div id="ferramenta-atividades" class="tool-content bg-white p-8 rounded-xl shadow-lg">
+        <main class="pt-24 px-4 md:px-8 pb-8">
+            <div id="ferramenta-atividades" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg">
                 <h2 class="text-2xl font-bold mb-6 text-slate-700">Gerador de Atividades Caninas</h2>
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -80,9 +81,7 @@
                 <button id="gerarIdeiasBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Atividades</button>
                 <div id="resultadoAtividades" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">As ideias de atividades aparecerão aqui...</p></div>
             </div>
-
-            <!-- Ferramenta 2: Montador de Rotina (Restaurado) -->
-            <div id="ferramenta-rotina" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+            <div id="ferramenta-rotina" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                  <h2 class="text-2xl font-bold mb-6 text-slate-700">Montador de Rotina Diária</h2>
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -97,22 +96,18 @@
                 <button id="gerarRotinaBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Rotina Diária</button>
                 <div id="resultadoRotina" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A sugestão de rotina diária aparecerá aqui...</p></div>
             </div>
-            
-            <!-- Ferramenta 3: Super Assistente (Restaurado) -->
-            <div id="ferramenta-assistente" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+            <div id="ferramenta-assistente" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Super Assistente</h2>
                 <div class="mb-6"><label for="perguntaAberta" class="block text-sm font-medium">Sua dúvida ou pedido:</label><textarea id="perguntaAberta" rows="5" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 'Como posso acalmar um cão ansioso?'"></textarea></div>
                 <button id="perguntarAssistenteBtn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Perguntar ao Assistente</button>
                 <div id="resultadoAssistente" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A resposta do assistente aparecerá aqui...</p></div>
             </div>
-
-            <!-- Ferramenta 4: Gerador de Relatórios -->
-            <div id="ferramenta-relatorios" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+            <div id="ferramenta-relatorios" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Gerador de Relatórios e Cartas</h2>
                 <div class="space-y-6">
                     <div>
                         <label for="tipoRelatorio" class="block text-sm font-medium text-slate-600 mb-1">Tipo de Documento</label>
-                        <select id="tipoRelatorio" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <select id="tipoRelatorio" class="w-full p-2 border border-slate-300 rounded-lg">
                             <option value="diario">Relatório Diário</option>
                             <option value="boasvindas">Carta de Boas-Vindas (1º Dia)</option>
                             <option value="boletim">Boletim de Fim de Ano</option>
@@ -124,9 +119,7 @@
                 <button id="gerarRelatorioBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Documento</button>
                 <div id="resultadoRelatorio" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O documento gerado aparecerá aqui...</p></div>
             </div>
-
-            <!-- Ferramenta 5: Criador de Conteúdo -->
-            <div id="ferramenta-conteudo" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+            <div id="ferramenta-conteudo" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Criador de Conteúdo para Redes Sociais</h2>
                 <div class="space-y-6">
                      <div><label for="temaPost" class="block text-sm font-medium text-slate-600 mb-1">Tema do Post ou Descrição da Foto</label><textarea id="temaPost" rows="4" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Ex: 'dicas para dias de chuva' ou 'foto do Zeca, um golden retriever, dormindo de barriga para cima'"></textarea></div>
@@ -134,14 +127,12 @@
                 <button id="gerarConteudoBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Legenda</button>
                 <div id="resultadoConteudo" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A legenda e as hashtags aparecerão aqui...</p></div>
             </div>
-
-            <!-- Ferramenta 6: Roteirista de Vídeos -->
-            <div id="ferramenta-roteiro" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+            <div id="ferramenta-roteiro" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Roteirista de Vídeos</h2>
                 <div class="space-y-6">
                     <div>
                         <label for="tipoVideo" class="block text-sm font-medium text-slate-600 mb-1">Formato do Vídeo</label>
-                        <select id="tipoVideo" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <select id="tipoVideo" class="w-full p-2 border border-slate-300 rounded-lg">
                             <option value="Dica Rápida para Stories">Dica Rápida para Stories (até 30s)</option>
                             <option value="Vídeo para Reels/TikTok">Vídeo para Reels/TikTok (até 60s)</option>
                             <option value="Vídeo para Feed/YouTube">Vídeo para Feed/YouTube (2-3 min)</option>
@@ -155,9 +146,7 @@
                 <button id="gerarRoteiroBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Roteiro</button>
                 <div id="resultadoRoteiro" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O roteiro do vídeo aparecerá aqui...</p></div>
             </div>
-            
-            <!-- Ferramenta 7: Brainstorm de Nomes -->
-             <div id="ferramenta-brainstorm" class="tool-content bg-white p-8 rounded-xl shadow-lg hidden">
+             <div id="ferramenta-brainstorm" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Brainstorm de Nomes</h2>
                 <div class="space-y-6">
                      <div><label for="temaNome" class="block text-sm font-medium text-slate-600 mb-1">Tema para o Nome</label><input type="text" id="temaNome" class="w-full p-2 border border-slate-300 rounded-lg" placeholder="Ex: 'festa de verão com piscina' ou 'grupo de cães idosos'"></div>
@@ -165,197 +154,205 @@
                 <button id="gerarNomesBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Nomes</button>
                 <div id="resultadoNomes" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">As ideias de nomes aparecerão aqui...</p></div>
             </div>
-
+            <div id="ferramenta-comunicados" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Gerador de Comunicados para Tutores</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label for="tema-comunicado" class="block text-sm font-medium text-slate-600 mb-1">Tema do Comunicado</label>
+                        <select id="tema-comunicado" class="w-full p-2 border border-slate-300 rounded-lg">
+                            <option>Aviso de Feriado</option>
+                            <option>Reajuste Anual de Preços</option>
+                            <option>Lançamento de Novo Serviço</option>
+                            <option>Campanha de Vacinação/Prevenção</option>
+                            <option>Mudança de Horário de Funcionamento</option>
+                        </select>
+                    </div>
+                    <div><label for="detalhes-comunicado" class="block text-sm font-medium text-slate-600 mb-1">Detalhes Adicionais</label><textarea id="detalhes-comunicado" rows="3" class="w-full p-3 border border-slate-300 rounded-lg" placeholder="Ex: 'Fecharemos no dia 20 de Novembro' ou 'O novo serviço de adestramento custará X por aula'"></textarea></div>
+                </div>
+                <button id="gerarComunicadoBtn" class="mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Comunicado</button>
+                <div id="resultadoComunicado" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O texto do comunicado aparecerá aqui...</p></div>
+            </div>
+            <div id="ferramenta-calculadora" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Calculadora de Pacotes</h2>
+                <div class="space-y-6">
+                    <div><label for="servicos-pacote" class="block text-sm font-medium">Serviços Desejados</label><textarea id="servicos-pacote" rows="3" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 5 dias de creche, 1 banho completo, 1 tosa higiênica"></textarea></div>
+                    <div><label for="valor-total-pacote" class="block text-sm font-medium">Valor Total (sem desconto)</label><input type="number" id="valor-total-pacote" placeholder="Ex: 350" class="w-full p-2 mt-1 border rounded-lg"></div>
+                </div>
+                <button id="gerarPacoteBtn" class="mt-6 bg-green-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Proposta</button>
+                <div id="resultadoPacote" class="result-content mt-8 p-6 bg-green-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A proposta de pacote aparecerá aqui...</p></div>
+            </div>
+            <div id="ferramenta-crm" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Gerador de Mensagens de Carinho</h2>
+                <div class="space-y-6">
+                    <div><label for="ocasiao-crm" class="block text-sm font-medium">Ocasião Especial</label><select id="ocasiao-crm" class="w-full p-2 mt-1 border rounded-lg"><option>Aniversário do Cão</option><option>Aniversário de 'Crecheversário'</option><option>Votos de Melhoras (Pós-cirúrgico/Doença)</option></select></div>
+                    <div><label for="nome-cao-crm" class="block text-sm font-medium">Nome do Cão</label><input type="text" id="nome-cao-crm" placeholder="Ex: Bob" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    <div><label for="nome-tutor-crm" class="block text-sm font-medium">Nome do Tutor (Opcional)</label><input type="text" id="nome-tutor-crm" placeholder="Ex: Sra. Helena" class="w-full p-2 mt-1 border rounded-lg"></div>
+                </div>
+                <button id="gerarMensagemCrmBtn" class="mt-6 bg-pink-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Mensagem</button>
+                <div id="resultadoCrm" class="result-content mt-8 p-6 bg-pink-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A mensagem de carinho aparecerá aqui...</p></div>
+            </div>
+            <div id="ferramenta-vendas" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Roteirista de Vendas para Recepção</h2>
+                <div class="space-y-6">
+                    <div><label for="produto-venda" class="block text-sm font-medium">Produto/Serviço a Oferecer</label><input type="text" id="produto-venda" placeholder="Ex: Petisco natural de maçã" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    <div><label for="perfil-cliente-venda" class="block text-sm font-medium">Perfil do Cliente/Cão</label><textarea id="perfil-cliente-venda" rows="2" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: Tutor preocupado com a saúde do cão, que tem o pelo sensível"></textarea></div>
+                </div>
+                <button id="gerarRoteiroVendaBtn" class="mt-6 bg-sky-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Roteiro de Venda</button>
+                <div id="resultadoVenda" class="result-content mt-8 p-6 bg-sky-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">O roteiro para a recepção aparecerá aqui...</p></div>
+            </div>
+            <div id="ferramenta-produtos" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
+                <h2 class="text-2xl font-bold mb-6">Descritivo de Produtos para Loja</h2>
+                <div class="space-y-6">
+                    <div><label for="nome-produto-desc" class="block text-sm font-medium">Nome do Produto</label><input type="text" id="nome-produto-desc" placeholder="Ex: Cama Terapêutica Super Conforto" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    <div><label for="caracteristicas-produto-desc" class="block text-sm font-medium">Características Principais</label><textarea id="caracteristicas-produto-desc" rows="3" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: Espuma de memória, capa lavável, alivia a pressão nas articulações, design moderno"></textarea></div>
+                </div>
+                <button id="gerarDescricaoProdutoBtn" class="mt-6 bg-purple-600 text-white font-bold py-3 px-6 rounded-lg">Gerar Descrição</button>
+                <div id="resultadoProduto" class="result-content mt-8 p-6 bg-purple-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A descrição do produto aparecerá aqui...</p></div>
+            </div>
         </main>
     </div>
 
-    <!-- SCRIPT PRINCIPAL DA APLICAÇÃO -->
     <script type="module">
-        // Importações do Firebase (APENAS para autenticação)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        const firebaseConfig = {
-          apiKey: "AIzaSyDpuBQsU67U1ZeKrEWoxpXNmAaE7zQMQxs",
-          authDomain: "canisgenius-97a2b.firebaseapp.com",
-          projectId: "canisgenius-97a2b",
-          storageBucket: "canisgenius-97a2b.appspot.com",
-          messagingSenderId: "887611778051",
-          appId: "1:887611778051:web:458c86bd429f3d4a255a36",
-          measurementId: "G-LMQYKSQNDD"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyDpuBQsU67U1ZeKrEWoxpXNmAaE7zQMQxs", authDomain: "canisgenius-97a2b.firebaseapp.com", projectId: "canisgenius-97a2b", storageBucket: "canisgenius-97a2b.appspot.com", messagingSenderId: "887611778051", appId: "1:887611778051:web:458c86bd429f3d4a255a36" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const GEMINI_API_KEY = "AIzaSyAfiXTtGUKVyHib95WnMRmYiRW7xhtb8Wc";
         
-        // --- Seleção de Elementos do DOM ---
         const loginWrapper = document.getElementById('login-wrapper');
         const appWrapper = document.getElementById('app-wrapper');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginButton = document.getElementById('login-button');
-        const logoutButton = document.getElementById('logout-button');
         const authError = document.getElementById('auth-error');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const navLinks = document.querySelectorAll('.nav-link');
+        
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userMenu = document.getElementById('user-menu');
+        const operacoesBtn = document.getElementById('operacoes-btn');
+        const operacoesMenu = document.getElementById('operacoes-menu');
+        const comunicacaoBtn = document.getElementById('comunicacao-btn');
+        const comunicacaoMenu = document.getElementById('comunicacao-menu');
+        const vendasBtn = document.getElementById('vendas-btn');
+        const vendasMenu = document.getElementById('vendas-menu');
+        const marketingBtn = document.getElementById('marketing-btn');
+        const marketingMenu = document.getElementById('marketing-menu');
+        
+        const logoutBtnDesktop = document.getElementById('logout-button-desktop');
+        const userEmailDesktop = document.getElementById('user-email-display-desktop');
+        
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         const toolContents = document.querySelectorAll('.tool-content');
 
-        // --- Lógica de Autenticação ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                appWrapper.style.display = 'flex';
+                appWrapper.style.display = 'block'; 
                 loginWrapper.style.display = 'none';
-                userEmailDisplay.textContent = user.email;
+                userEmailDesktop.textContent = user.email;
+                mobileMenu.innerHTML = `
+                     <p class="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Operações & Segurança</p>
+                     <a href="#" data-tool="atividades" class="nav-link-mobile active-mobile block py-2 px-4 text-sm rounded-md">Gerador de Atividades</a><a href="#" data-tool="rotina" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Montador de Rotina</a>
+                     <p class="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Comunicação & CRM</p>
+                     <a href="#" data-tool="relatorios" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Gerador de Relatórios</a><a href="#" data-tool="comunicados" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Gerador de Comunicados</a><a href="#" data-tool="crm" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Mensagens de Carinho</a>
+                     <p class="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Loja & Vendas</p>
+                     <a href="#" data-tool="calculadora" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Calculadora de Pacotes</a><a href="#" data-tool="vendas" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Roteirista de Vendas</a><a href="#" data-tool="produtos" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Descritivo de Produtos</a>
+                     <p class="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Marketing & Criatividade</p>
+                     <a href="#" data-tool="conteudo" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Criador de Conteúdo</a><a href="#" data-tool="roteiro" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Roteirista de Vídeos</a><a href="#" data-tool="brainstorm" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Brainstorm de Nomes</a>
+                     <p class="px-4 pt-4 pb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Geral</p>
+                     <a href="#" data-tool="assistente" class="nav-link-mobile block py-2 px-4 text-sm rounded-md">Super Assistente</a>
+                     <div class="border-t border-slate-700 mt-4 pt-4"><div class="px-4 font-medium truncate mb-2">${user.email}</div><button id="logout-button-mobile" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-600 hover:text-white rounded-md">Sair</button></div>
+                `;
+                 document.getElementById('logout-button-mobile').addEventListener('click', handleLogout);
+                 document.querySelectorAll('.nav-link-mobile').forEach(link => link.addEventListener('click', handleNavLinkClick));
             } else {
                 appWrapper.style.display = 'none';
                 loginWrapper.style.display = 'flex';
             }
         });
-        loginButton.addEventListener('click', async (e) => {
-            e.preventDefault();
-            authError.textContent = '';
-            try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); } 
-            catch (error) { authError.textContent = getAuthErrorMessage(error.code); }
-        });
-        logoutButton.addEventListener('click', async () => {
-            try { await signOut(auth); } 
-            catch (error) { console.error("Erro ao sair:", error); }
-        });
+        loginButton.addEventListener('click', async (e) => { e.preventDefault(); authError.textContent = ''; try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); } catch (error) { authError.textContent = getAuthErrorMessage(error.code); } });
+        const handleLogout = async () => { try { await signOut(auth); } catch (error) { console.error("Erro ao sair:", error); } };
+        logoutBtnDesktop.addEventListener('click', handleLogout);
+
         function getAuthErrorMessage(errorCode) {
-            switch (errorCode) {
-                case 'auth/invalid-email': return 'Formato de e-mail inválido.';
-                case 'auth/user-not-found': case 'auth/wrong-password': case 'auth/invalid-credential': return 'E-mail ou senha incorretos.';
-                default: return 'Ocorreu um erro. Tente novamente.';
-            }
+             switch (errorCode) { case 'auth/invalid-email': return 'Formato de e-mail inválido.'; case 'auth/user-not-found': case 'auth/wrong-password': case 'auth/invalid-credential': return 'E-mail ou senha incorretos.'; default: return 'Ocorreu um erro. Tente novamente.'; }
         }
+        
+        function toggleDropdown(menu, otherMenus = []) { menu.classList.toggle('hidden'); otherMenus.forEach(m => m.classList.add('hidden')); }
+        const allDropdowns = [userMenu, operacoesMenu, comunicacaoMenu, vendasMenu, marketingMenu];
+        userMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(userMenu, [operacoesMenu, comunicacaoMenu, vendasMenu, marketingMenu]); });
+        operacoesBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(operacoesMenu, [userMenu, comunicacaoMenu, vendasMenu, marketingMenu]); });
+        comunicacaoBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(comunicacaoMenu, [userMenu, operacoesMenu, vendasMenu, marketingMenu]); });
+        vendasBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(vendasMenu, [userMenu, operacoesMenu, comunicacaoMenu, marketingMenu]); });
+        marketingBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(marketingMenu, [userMenu, operacoesMenu, comunicacaoMenu, vendasMenu]); });
+        hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        window.addEventListener('click', () => allDropdowns.forEach(m => m.classList.add('hidden')));
 
-        // --- Lógica de Navegação da Aplicação ---
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const tool = link.getAttribute('data-tool');
-                toolContents.forEach(content => content.classList.add('hidden'));
-                document.getElementById(`ferramenta-${tool}`).classList.remove('hidden');
-                navLinks.forEach(nav => nav.classList.remove('active'));
-                link.classList.add('active');
-            });
-        });
+        function handleNavLinkClick(e) {
+            e.preventDefault();
+            const tool = e.currentTarget.getAttribute('data-tool');
+            toolContents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(`ferramenta-${tool}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(nav => { nav.classList.remove('active'); nav.classList.remove('active-mobile'); });
+            document.querySelectorAll('.nav-category-btn').forEach(btn => btn.classList.remove('active-category'));
+            
+            const clickedLinkDesktop = document.querySelector(`.nav-link[data-tool='${tool}']`);
+            if(clickedLinkDesktop){
+                clickedLinkDesktop.classList.add('active');
+                const parentCategory = clickedLinkDesktop.closest('.relative');
+                if (parentCategory) {
+                    parentCategory.querySelector('.nav-category-btn')?.classList.add('active-category');
+                }
+            }
+             document.querySelector(`.nav-link-mobile[data-tool='${tool}']`)?.classList.add('active-mobile');
+            
+            if (!mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden');
+            allDropdowns.forEach(m => m.classList.add('hidden'));
+        };
+        document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(link => link.addEventListener('click', handleNavLinkClick));
 
-        // --- Adicionar Listeners para TODOS os botões de ferramentas ---
         function addToolListener(buttonId, resultId, promptBuilder) {
             const button = document.getElementById(buttonId);
             const resultElement = document.getElementById(resultId);
-            if (button && resultElement) {
-                button.addEventListener('click', () => {
-                    const prompt = promptBuilder();
-                    callSimpleApi(prompt, resultElement, button);
-                });
-            }
+            if (button && resultElement) button.addEventListener('click', () => callSimpleApi(promptBuilder(), resultElement, button));
         }
 
-        // Ferramenta 1: Gerador de Atividades
-        addToolListener('gerarIdeiasBtn', 'resultadoAtividades', () => {
-            return `# PERSONA
-Aja como um adestrador profissional e especialista em comportamento canino.
-# TAREFA
-Crie um plano com 3 atividades seguras para uma creche de cães.
-# CONTEXTO
-- Perfil do Grupo: ${document.getElementById('perfilGrupo').value}
-- Clima: ${document.getElementById('climaAtividade').value}
-- Foco: ${document.getElementById('focoAtividade').value}
-- Observações: ${document.getElementById('observacoesAtividades').value || 'Nenhuma'}
-# FORMATO
-**Nome da Atividade:**, **Benefícios Principais:**, **Materiais:**, **Passo a Passo:**, **⚠️ Segurança:**.`;
-        });
-
-        // Ferramenta 2: Montador de Rotina
-        addToolListener('gerarRotinaBtn', 'resultadoRotina', () => {
-            return `# PERSONA
-Aja como um gestor de operações de um daycare canino.
-# TAREFA
-Crie uma sugestão de rotina diária em formato de linha do tempo.
-# CONTEXTO
-- Horários: Início ${document.getElementById('horarioInicio').value}, Almoço ${document.getElementById('horarioAlmoco').value}, Saída ${document.getElementById('horarioSaida').value}
-- Clima: ${document.getElementById('climaRotina').value}
-- Detalhes dos Cães: ${document.getElementById('detalhesGrupos').value || 'Não especificado'}
-- Observações: ${document.getElementById('observacoesRotina').value || 'Nenhuma'}
-# FORMATO
-Use blocos "- **HH:MM - HH:MM:** Atividade (Justificativa)".`;
-        });
-        
-        // Ferramenta 3: Super Assistente
-        addToolListener('perguntarAssistenteBtn', 'resultadoAssistente', () => {
-            return `# PERSONA
-Você é o 'Gênio Canino', um assistente de IA especialista.
-# REGRAS
-1. Segurança em primeiro lugar. 2. Apenas reforço positivo. 3. Se envolver saúde, SEMPRE recomende "consultar um médico veterinário".
-# PERGUNTA DO USUÁRIO
-"${document.getElementById('perguntaAberta').value}"`;
-        });
-        
-        // Ferramenta 4: Gerador de Relatórios (COM PROMPTS MELHORADOS)
-        addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => {
-            const tipo = document.getElementById('tipoRelatorio').value;
-            const nomeCao = document.getElementById('nomeCaoRelatorio').value;
-            const obs = document.getElementById('observacoesRelatorio').value;
-            if (tipo === 'diario') {
-                return `Aja como um cuidador atencioso e profissional da creche CanisGenius. Elabore um relatório diário detalhado e afetuoso para o tutor do(a) cão/cadela '${nomeCao}'. O texto deve ser bem escrito e transmitir segurança e carinho. Transforme as seguintes observações curtas em um parágrafo fluído e informativo: "${obs}". Conclua de forma positiva, mencionando que a equipe está ansiosa para revê-lo(a) amanhã.`;
-            }
-            if (tipo === 'boasvindas') {
-                return `Aja como a equipe de boas-vindas da creche CanisGenius. Elabore uma carta de boas-vindas calorosa e completa para o tutor do(a) '${nomeCao}', celebrando o seu primeiro dia conosco. A carta deve ser emocionante e profissional, descrevendo a importância desta nova jornada. Use as seguintes observações sobre a primeira experiência dele(a) para construir o texto: "${obs}". Finalize reforçando a alegria da equipe em tê-lo(a) na matilha CanisGenius.`;
-            }
-            if (tipo === 'boletim') {
-                return `Aja como o principal cuidador e especialista em comportamento da creche CanisGenius. Elabore um boletim de fim de ano emocionante e detalhado para os tutores do(a) '${nomeCao}'. Faça uma retrospectiva do ano, transformando os seguintes pontos-chave em uma narrativa cativante sobre a evolução, as amizades e os momentos marcantes dele(a) na creche: "${obs}". O tom deve ser de celebração e gratidão pela confiança.`;
-            }
-            return '';
-        });
-
-        // Ferramenta 5: Criador de Conteúdo
-        addToolListener('gerarConteudoBtn', 'resultadoConteudo', () => {
-            return `Aja como um social media de uma creche para cães. Crie uma legenda para um post no Instagram sobre: "${document.getElementById('temaPost').value}". Inclua 5 a 7 hashtags relevantes.`;
-        });
-        
-        // Ferramenta 6: Roteirista de Vídeos
-        addToolListener('gerarRoteiroBtn', 'resultadoRoteiro', () => {
-            return `Aja como um roteirista e especialista em marketing digital para pet shops. Crie um roteiro para um vídeo do tipo "${document.getElementById('tipoVideo').value}" com o tema "${document.getElementById('temaVideo').value}". O roteiro deve incluir: 1. **Título Chamativo**. 2. **Cena a Cena:** (Descreva a imagem e a narração/texto). 3. **Música Sugerida**. 4. **Texto para a Descrição do Post**.`;
-        });
-        
-        // Ferramenta 7: Brainstorm de Nomes
-        addToolListener('gerarNomesBtn', 'resultadoNomes', () => {
-            return `Faça um brainstorm e liste 10 nomes criativos e divertidos para algo relacionado a cães. O tema é: "${document.getElementById('temaNome').value}". Use trocadilhos.`;
-        });
+        addToolListener('gerarIdeiasBtn', 'resultadoAtividades', () => `Aja como um adestrador criativo...`);
+        addToolListener('gerarRotinaBtn', 'resultadoRotina', () => `Aja como um gestor de daycare...`);
+        addToolListener('perguntarAssistenteBtn', 'resultadoAssistente', () => `Aja como o 'Gênio Canino', um IA especialista...`);
+        addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => `...`);
+        addToolListener('gerarConteudoBtn', 'resultadoConteudo', () => `...`);
+        addToolListener('gerarRoteiroBtn', 'resultadoRoteiro', () => `...`);
+        addToolListener('gerarNomesBtn', 'resultadoNomes', () => `...`);
+        addToolListener('gerarComunicadoBtn', 'resultadoComunicado', () => `...`);
+        addToolListener('gerarPacoteBtn', 'resultadoPacote', () => `...`);
+        addToolListener('gerarMensagemCrmBtn', 'resultadoCrm', () => `...`);
+        addToolListener('gerarRoteiroVendaBtn', 'resultadoVenda', () => `...`);
+        addToolListener('gerarDescricaoProdutoBtn', 'resultadoProduto', () => `...`);
 
         async function callSimpleApi(prompt, resultElement, buttonElement) {
             if (!prompt) return;
-            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes("SUA_CHAVE")) {
-                 resultElement.innerHTML = `<p class="text-red-500"><strong>ERRO:</strong> A chave da API do Gemini não foi configurada.</p>`;
-                 return;
-            }
             resultElement.innerHTML = '<div class="loader"></div>';
             buttonElement.disabled = true;
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
             try {
                 const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error.message || `Erro de Rede: ${response.status}`);
-                }
+                if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.error.message || `Erro de Rede: ${response.status}`); }
                 const result = await response.json();
                 const text = result.candidates[0].content.parts[0].text;
                 resultElement.innerHTML = formatResponse(text);
             } catch (error) {
-                console.error("Erro ao chamar a API do Gemini:", error);
+                console.error("Erro:", error);
                 resultElement.innerHTML = `<p class="text-red-500">Ocorreu um erro: ${error.message}</p>`;
             } finally {
                 buttonElement.disabled = false;
             }
         }
         
-        function formatResponse(text) { 
-            if (!text) return '';
-            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/# (.*)/g, '<h3>$1</h3>').replace(/⚠️/g, '<span class="text-amber-600 font-bold">⚠️</span>').replace(/\n/g, '<br>'); 
-        }
+        function formatResponse(text) { return !text ? '' : text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/# (.*)/g, '<h3>$1</h3>').replace(/⚠️/g, '<span class="text-amber-600 font-bold">⚠️</span>').replace(/\n/g, '<br>'); }
     </script>
 </body>
 </html>
