@@ -84,11 +84,24 @@
             <div id="ferramenta-rotina" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                  <h2 class="text-2xl font-bold mb-6 text-slate-700">Montador de Rotina Diária</h2>
                 <div class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div><label for="horarioInicio" class="block text-sm font-medium">Início</label><input type="time" id="horarioInicio" value="08:00" class="w-full p-2 mt-1 border rounded-lg"></div>
-                        <div><label for="horarioAlmoco" class="block text-sm font-medium">Almoço</label><input type="time" id="horarioAlmoco" value="12:00" class="w-full p-2 mt-1 border rounded-lg"></div>
-                        <div><label for="horarioSaida" class="block text-sm font-medium">Saída</label><input type="time" id="horarioSaida" value="18:00" class="w-full p-2 mt-1 border rounded-lg"></div>
-                        <div><label for="climaRotina" class="block text-sm font-medium">Clima</label><input type="text" id="climaRotina" placeholder="Ex: Agradável" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div><label for="horarioInicio" class="block text-sm font-medium">Início (Cães)</label><input type="time" id="horarioInicio" value="08:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                        <div><label for="horarioAlmocoCaes" class="block text-sm font-medium">Almoço (Cães)</label><input type="time" id="horarioAlmocoCaes" value="12:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                        <div><label for="horarioSaida" class="block text-sm font-medium">Saída (Cães)</label><input type="time" id="horarioSaida" value="18:00" class="w-full p-2 mt-1 border rounded-lg"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                         <div>
+                            <label for="almocoFuncInicio" class="block text-sm font-medium">Início Almoço (Equipe)</label>
+                            <input type="time" id="almocoFuncInicio" value="12:00" class="w-full p-2 mt-1 border rounded-lg">
+                        </div>
+                        <div>
+                            <label for="almocoFuncFim" class="block text-sm font-medium">Fim Almoço (Equipe)</label>
+                            <input type="time" id="almocoFuncFim" value="14:00" class="w-full p-2 mt-1 border rounded-lg">
+                        </div>
+                        <div>
+                            <label for="climaRotina" class="block text-sm font-medium">Clima</label>
+                            <input type="text" id="climaRotina" placeholder="Ex: Agradável" class="w-full p-2 mt-1 border rounded-lg">
+                        </div>
                     </div>
                     <div><label for="detalhesGrupos" class="block text-sm font-medium">Detalhes dos Cães e Grupos</label><textarea id="detalhesGrupos" rows="2" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 30 cães, 2 grupos: pequenos e grandes."></textarea></div>
                     <div><label for="observacoesRotina" class="block text-sm font-medium">Observações</label><textarea id="observacoesRotina" rows="3" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: Turma da manhã tem mais energia."></textarea></div>
@@ -98,7 +111,7 @@
             </div>
             <div id="ferramenta-assistente" class="tool-content bg-white p-6 md:p-8 rounded-xl shadow-lg hidden">
                 <h2 class="text-2xl font-bold mb-6">Super Assistente</h2>
-                <div class="mb-6"><label for="perguntaAberta" class="block text-sm font-medium">Sua dúvida ou pedido:</label><textarea id="perguntaAberta" rows="5" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 'Como posso acalmar um cão ansioso?'"></textarea></div>
+                <div class="mb-6"><label for="perguntaAberta" class="block text-sm font-medium">Sua dúvida ou pedido:</label><textarea id="perguntaAberta" rows="5" class="w-full p-3 mt-1 border rounded-lg" placeholder="Ex: 'Crie um post para o instagram sobre a importância da socialização para filhotes.' ou 'Quais os 5 itens mais vendidos em petshops?'"></textarea></div>
                 <button id="perguntarAssistenteBtn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg">Perguntar ao Assistente</button>
                 <div id="resultadoAssistente" class="result-content mt-8 p-6 bg-slate-50 rounded-lg border min-h-[100px]"><p class="text-slate-500">A resposta do assistente aparecerá aqui...</p></div>
             </div>
@@ -305,6 +318,9 @@
                 if (parentCategory) {
                     parentCategory.querySelector('.nav-category-btn')?.classList.add('active-category');
                 }
+            } else {
+                 const standaloneLink = document.querySelector(`a.nav-link[data-tool='${tool}']`);
+                 if(standaloneLink) standaloneLink.classList.add('active');
             }
              document.querySelector(`.nav-link-mobile[data-tool='${tool}']`)?.classList.add('active-mobile');
             
@@ -319,18 +335,26 @@
             if (button && resultElement) button.addEventListener('click', () => callSimpleApi(promptBuilder(), resultElement, button));
         }
 
-        addToolListener('gerarIdeiasBtn', 'resultadoAtividades', () => `Aja como um adestrador criativo...`);
-        addToolListener('gerarRotinaBtn', 'resultadoRotina', () => `Aja como um gestor de daycare...`);
-        addToolListener('perguntarAssistenteBtn', 'resultadoAssistente', () => `Aja como o 'Gênio Canino', um IA especialista...`);
-        addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => `...`);
-        addToolListener('gerarConteudoBtn', 'resultadoConteudo', () => `...`);
-        addToolListener('gerarRoteiroBtn', 'resultadoRoteiro', () => `...`);
-        addToolListener('gerarNomesBtn', 'resultadoNomes', () => `...`);
-        addToolListener('gerarComunicadoBtn', 'resultadoComunicado', () => `...`);
-        addToolListener('gerarPacoteBtn', 'resultadoPacote', () => `...`);
-        addToolListener('gerarMensagemCrmBtn', 'resultadoCrm', () => `...`);
-        addToolListener('gerarRoteiroVendaBtn', 'resultadoVenda', () => `...`);
-        addToolListener('gerarDescricaoProdutoBtn', 'resultadoProduto', () => `...`);
+        addToolListener('gerarIdeiasBtn', 'resultadoAtividades', () => `Aja como um adestrador criativo. Crie 3 atividades **diferentes e variadas** para uma creche de cães, baseadas em: [Perfil: ${document.getElementById('perfilGrupo').value}, Clima: ${document.getElementById('climaAtividade').value}, Foco: ${document.getElementById('focoAtividade').value}, Obs: ${document.getElementById('observacoesAtividades').value || 'Nenhuma'}]. Formato: **Nome:**, **Benefícios:**, **Materiais:**, **Passo a Passo:**, **⚠️ Segurança:**.`);
+        addToolListener('gerarRotinaBtn', () => `Aja como um gestor de daycare. Crie uma rotina diária em linha do tempo para: [Início: ${document.getElementById('horarioInicio').value}, Almoço Cães: ${document.getElementById('horarioAlmocoCaes').value}, Saída: ${document.getElementById('horarioSaida').value}, Almoço Equipe: das ${document.getElementById('almocoFuncInicio').value} às ${document.getElementById('almocoFuncFim').value}, Clima: ${document.getElementById('climaRotina').value}, Cães: ${document.getElementById('detalhesGrupos').value || 'Não especificado'}, Obs: ${document.getElementById('observacoesRotina').value || 'Nenhuma'}]. Formato: "- **HH:MM - HH:MM:** Atividade (Justificativa)". Considere o almoço da equipe para garantir supervisão constante.`);
+        addToolListener('perguntarAssistenteBtn', 'resultadoAssistente', () => `Aja como o 'Gênio Canino', um assistente de IA especialista em todos os aspectos de uma creche e petshop. Responda de forma completa e prestativa sobre qualquer assunto: comportamento canino, atividades, rotinas, produtos da loja, marketing, gestão, etc. Seja um 'coringa' para resolver qualquer dúvida ou executar qualquer tarefa de escrita que eu pedir. Minha solicitação é: "${document.getElementById('perguntaAberta').value}". Se o pedido envolver saúde, sempre recomende ao final para "consultar um médico veterinário".`);
+        addToolListener('gerarRelatorioBtn', 'resultadoRelatorio', () => {
+            const tipo = document.getElementById('tipoRelatorio').value;
+            const nomeCao = document.getElementById('nomeCaoRelatorio').value;
+            const obs = document.getElementById('observacoesRelatorio').value;
+            if (tipo === 'diario') return `Aja como um cuidador da CanisGenius. Elabore um relatório diário detalhado e afetuoso para o tutor do(a) '${nomeCao}', usando: "${obs}".`;
+            if (tipo === 'boasvindas') return `Aja como a equipe da CanisGenius. Elabore uma carta de boas-vindas calorosa para o tutor do(a) '${nomeCao}', com base em: "${obs}".`;
+            if (tipo === 'boletim') return `Aja como o principal cuidador da CanisGenius. Elabore um boletim de fim de ano emocionante para o tutor do(a) '${nomeCao}', usando: "${obs}".`;
+            return '';
+        });
+        addToolListener('gerarConteudoBtn', 'resultadoConteudo', () => `Aja como um social media de uma creche pet. Crie uma legenda para post no Instagram sobre: "${document.getElementById('temaPost').value}".`);
+        addToolListener('gerarRoteiroBtn', 'resultadoRoteiro', () => `Aja como um roteirista de marketing. Crie um roteiro para um vídeo do tipo "${document.getElementById('tipoVideo').value}" com o tema "${document.getElementById('temaVideo').value}".`);
+        addToolListener('gerarNomesBtn', 'resultadoNomes', () => `Aja como um redator publicitário brasileiro. Liste 10 nomes criativos em português para: "${document.getElementById('temaNome').value}".`);
+        addToolListener('gerarComunicadoBtn', 'resultadoComunicado', () => `Aja como o gerente de comunicação da creche CanisGenius. Escreva um comunicado profissional, claro e empático para todos os tutores sobre o tema "${document.getElementById('tema-comunicado').value}". Use os seguintes detalhes para elaborar o texto: "${document.getElementById('detalhes-comunicado').value}".`);
+        addToolListener('gerarPacoteBtn', 'resultadoPacote', () => `Aja como um consultor de vendas da CanisGenius. Baseado nos serviços: '${document.getElementById('servicos-pacote').value}' que totalizam R$${document.getElementById('valor-total-pacote').value}, crie uma proposta de pacote. Calcule um desconto atrativo (entre 5% e 15%) e apresente o valor final. Escreva uma mensagem curta e persuasiva para o WhatsApp explicando o pacote, os benefícios e o valor promocional.`);
+        addToolListener('gerarMensagemCrmBtn', 'resultadoCrm', () => `Aja como a equipe de relacionamento da CanisGenius. Escreva uma mensagem de carinho, curta e sincera para o tutor(a) ${document.getElementById('nome-tutor-crm').value || 'do(a)'} '${document.getElementById('nome-cao-crm').value}' para a seguinte ocasião: '${document.getElementById('ocasiao-crm').value}'. O tom deve ser genuíno e afetuoso.`);
+        addToolListener('gerarRoteiroVendaBtn', 'resultadoVenda', () => `Aja como um coach de vendas para a recepção de uma creche pet. Crie um roteiro curto e natural para a recepcionista oferecer o seguinte produto/serviço: '${document.getElementById('produto-venda').value}' para um cliente com o perfil: '${document.getElementById('perfil-cliente-venda').value}'. O roteiro deve ser amigável e focado nos benefícios.`);
+        addToolListener('gerarDescricaoProdutoBtn', 'resultadoProduto', () => `Aja como um redator de marketing especialista em e-commerce pet. Crie uma descrição de produto atraente para '${document.getElementById('nome-produto-desc').value}' com as seguintes características: '${document.getElementById('caracteristicas-produto-desc').value}'. Foque nos benefícios e use gatilhos emocionais.`);
 
         async function callSimpleApi(prompt, resultElement, buttonElement) {
             if (!prompt) return;
